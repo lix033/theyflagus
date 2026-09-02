@@ -1,6 +1,6 @@
-# Flag It
+# theyflagus
 
-Red flag ou green flag : deux gros boutons, un verdict immédiat.
+*they flag us* — red flag ou green flag : deux gros boutons, un verdict immédiat.
 Un appui déclenche un **son** (succès ou erreur), **colore tout l'écran** en vert ou
 en rouge, et **fait vibrer** l'appareil. L'application s'installe sur Android et
 iOS depuis le navigateur, sans passer par un store.
@@ -26,7 +26,7 @@ npm run build && npm start
 L'installation d'une PWA exige une origine sécurisée : `localhost` ou **HTTPS**.
 Déployez (Vercel, Netlify, Cloudflare Pages… `npm run build` suffit) puis :
 
-- **Android / Chrome** — une bannière « Installer Flag It » apparaît dans
+- **Android / Chrome** — une bannière « Installer theyflagus » apparaît dans
   l'application ; sinon menu ⋮ → *Ajouter à l'écran d'accueil*.
 - **iOS / Safari** — bouton *Partager* → *Sur l'écran d'accueil*. L'application
   rappelle le geste automatiquement (iOS n'expose pas de bouton d'installation).
@@ -41,6 +41,7 @@ fonctionne hors ligne.
 | `app/page.tsx` | Assemble l'écran |
 | `app/manifest.ts` | Manifeste PWA (servi sur `/manifest.webmanifest`) |
 | `app/globals.css` | Design system : jetons, cartes, flash plein écran |
+| `components/Logo.tsx` | Le logo : drapeau deux tons + signature `theyflagus` |
 | `components/FlagBoard.tsx` | Les deux boutons, le flash, le réglage du son |
 | `components/InstallPrompt.tsx` | Invitation à installer (Android + iOS) |
 | `components/ServiceWorker.tsx` | Enregistrement du service worker |
@@ -64,6 +65,12 @@ fonctionne hors ligne.
 - **Vibration** — `navigator.vibrate` (Android ; iOS ne l'expose pas) : brève
   sur green flag, longue et saccadée sur red flag, en écho au buzzer.
 - **Réactivité** — le verdict part sur `pointerdown`, pas sur `click`.
+- **Logo** — un drapeau dont l'oriflamme est coupée net en deux, vert côté hampe
+  et rouge à la volée : les deux verdicts dans un seul signe. La signature reprend
+  la coupure sur le nom — they·**fl**·**ag**·us. La géométrie de
+  `components/Logo.tsx` est celle qu'utilise `scripts/generate-icons.mjs`, donc la
+  marque affichée dans l'en-tête et l'icône installée sur l'écran d'accueil sont
+  strictement le même dessin.
 - **Icônes** — jeu d'icônes lucide (aucun emoji) ; icônes d'application générées
   depuis un SVG vectoriel, avec variantes *maskable* pour Android et
   `apple-touch-icon` pour iOS.

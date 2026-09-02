@@ -8,7 +8,7 @@ type InstallEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 };
 
-const DISMISS_KEY = "flagit:install-dismissed";
+const DISMISS_KEY = "theyflagus:install-dismissed";
 const APPEAR_DELAY = 2200;
 
 function isStandalone(): boolean {
@@ -97,7 +97,7 @@ export default function InstallPrompt() {
       </span>
 
       <div className="sheet-body">
-        <p className="sheet-title">Installer Flag It</p>
+        <p className="sheet-title">Installer theyflagus</p>
         {showIOS && !deferred ? (
           <p className="sheet-text">
             Touchez <Share aria-hidden="true" /> puis

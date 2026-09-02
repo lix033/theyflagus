@@ -1,6 +1,6 @@
-/* Flag It — service worker : coquille applicative disponible hors ligne. */
+/* theyflagus — service worker : coquille applicative disponible hors ligne. */
 
-const VERSION = "flagit-v1";
+const VERSION = "theyflagus-v1";
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 

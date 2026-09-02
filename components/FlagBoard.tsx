@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Flag, Volume2, VolumeX } from "lucide-react";
+import { LogoMark, Wordmark } from "@/components/Logo";
 import { playVerdict, unlockAudio, vibrate } from "@/lib/audio";
 
 type Kind = "green" | "red";
@@ -10,7 +11,7 @@ type Flash = { id: number; kind: Kind; x: number; y: number };
 
 /** Le flash tient l'écran aussi longtemps que le son du verdict. */
 const FLASH_MS = 2300;
-const SOUND_KEY = "flagit:sound";
+const SOUND_KEY = "theyflagus:sound";
 
 const THEME_COLOR: Record<Kind | "idle", string> = {
   green: "#16a34a",
@@ -135,10 +136,12 @@ export default function FlagBoard() {
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">
-            <Flag size={17} strokeWidth={2} />
+            <LogoMark size={21} />
           </span>
           <span className="brand-text">
-            <span className="brand-title">Flag It</span>
+            <span className="brand-title">
+              <Wordmark />
+            </span>
             <span className="brand-sub">Le verdict, en un geste</span>
           </span>
         </div>

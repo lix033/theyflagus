@@ -2,14 +2,14 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ServiceWorker from "@/components/ServiceWorker";
 
-const APP_NAME = "Flag It";
+const APP_NAME = "theyflagus";
 const DESCRIPTION =
   "Red flag ou green flag ? Deux boutons, un verdict immédiat : son, couleur plein écran et vibration.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
   title: {
-    default: `${APP_NAME} — Red flag ou green flag`,
+    default: `${APP_NAME} — red flag ou green flag`,
     template: `%s · ${APP_NAME}`,
   },
   description: DESCRIPTION,
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    title: `${APP_NAME} — Red flag ou green flag`,
+    title: `${APP_NAME} — red flag ou green flag`,
     description: DESCRIPTION,
     siteName: APP_NAME,
   },

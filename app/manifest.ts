@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Flag It — Red flag ou green flag",
-    short_name: "Flag It",
+    name: "theyflagus — red flag ou green flag",
+    short_name: "theyflagus",
     description:
       "Deux boutons, un verdict immédiat : son, couleur plein écran et vibration.",
     start_url: "/",
