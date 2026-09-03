@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Flag, Volume2, VolumeX } from "lucide-react";
 import { LogoMark, Wordmark } from "@/components/Logo";
-import { playVerdict, unlockAudio, vibrate } from "@/lib/audio";
+import { playVerdict, prepareAudio, stopVerdict, unlockAudio, vibrate } from "@/lib/audio";
 
 type Kind = "green" | "red";
 
@@ -47,6 +47,12 @@ export default function FlagBoard() {
   const flashTimer = useRef<number | null>(null);
   const seq = useRef(0);
 
+  /* Les deux verdicts sont rendus dès le montage : le tout premier appui
+     dispose ainsi déjà de son fichier, sans latence ni son avalé. */
+  useEffect(() => {
+    void prepareAudio();
+  }, []);
+
   /* Préférence son mémorisée sur l'appareil. */
   useEffect(() => {
     try {
@@ -78,6 +84,7 @@ export default function FlagBoard() {
         /* ignoré */
       }
       if (next) unlockAudio();
+      else stopVerdict();
       return next;
     });
   }, []);

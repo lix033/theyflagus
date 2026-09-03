@@ -45,23 +45,40 @@ fonctionne hors ligne.
 | `components/FlagBoard.tsx` | Les deux boutons, le flash, le réglage du son |
 | `components/InstallPrompt.tsx` | Invitation à installer (Android + iOS) |
 | `components/ServiceWorker.tsx` | Enregistrement du service worker |
-| `lib/audio.ts` | Sons tenus de succès / d'erreur synthétisés (Web Audio API) |
+| `lib/audio.ts` | Sons de succès / d'erreur : synthèse, rendu WAV, lecture |
 | `public/sw.js` | Cache hors ligne |
 | `scripts/generate-icons.mjs` | Génère les icônes PNG depuis un SVG (`npm run icons`) |
 
 ## Détails d'implémentation
 
-- **Sons** — synthétisés à la volée avec la Web Audio API : aucun fichier à
-  télécharger, latence quasi nulle, fonctionne hors ligne. Les deux verdicts sont
-  **tenus** et restent sous les 3 secondes : le green flag est un accord majeur
-  qui s'installe et résonne (≈ 2,4 s audibles), le red flag un **buzzer grave et
-  rêche** qui tient son palier avant de retomber (≈ 2,2 s). Un nouvel appui
-  éteint le son précédent en douceur au lieu de s'y superposer, et un limiteur
-  protège de la saturation. Le contexte audio est débloqué au premier appui
-  (contrainte iOS / Chrome). Le bouton haut-parleur coupe le son, le choix est
-  mémorisé sur l'appareil.
-  *Sur iPhone, le bouton latéral silencieux coupe l'audio du web : c'est une
-  limite du système, pas de l'application.*
+- **Sons** — synthétisés avec la Web Audio API : aucun fichier à télécharger,
+  fonctionne hors ligne. Les deux verdicts sont **tenus** et restent sous les
+  3 secondes : le green flag est un accord majeur qui s'installe et résonne
+  (≈ 2,4 s audibles), le red flag un **buzzer grave et rêche** qui tient son
+  palier avant de retomber (≈ 2,2 s). Un nouvel appui éteint le son précédent
+  au lieu de s'y superposer, et un limiteur protège de la saturation. Le bouton
+  haut-parleur coupe le son, le choix est mémorisé sur l'appareil.
+
+- **Le son sur un vrai téléphone** — trois obstacles, trois réponses ; ils ne se
+  voient pas sur un navigateur de bureau :
+
+  1. *iPhone en mode silencieux.* La Web Audio API sort dans la session audio
+     « ambient », que le bouton latéral silencieux coupe — un élément `<audio>`,
+     lui, sonne quand même. Les deux verdicts sont donc **rendus une fois** en
+     WAV (`OfflineAudioContext`, dès le montage de la page) puis joués par un
+     élément `<audio>`. iOS 16.4+ se voit en plus réclamer la session
+     `playback`. La synthèse temps réel reste le repli si le rendu échoue.
+  2. *Premier appui muet.* `AudioContext` démarre « suspended » et repasse
+     « interrupted » sur iOS après un appel ; `resume()` étant asynchrone,
+     programmer les oscillateurs juste après revient à les programmer dans le
+     passé. Le moteur attend désormais la reprise, et relance le contexte au
+     retour au premier plan.
+  3. *Haut-parleur de téléphone.* Il ne restitue quasiment rien sous ~500 Hz.
+     Un buzzer bâti sur des fondamentales à ~100 Hz est donc inaudible sans
+     casque : chaque verdict porte maintenant son énergie dans la bande
+     réellement reproduite (mesuré : le red flag y gagne 5 dB et rejoint le
+     green flag), et le rendu est normalisé pour un volume constant d'un
+     appareil à l'autre.
 - **Vibration** — `navigator.vibrate` (Android ; iOS ne l'expose pas) : brève
   sur green flag, longue et saccadée sur red flag, en écho au buzzer.
 - **Réactivité** — le verdict part sur `pointerdown`, pas sur `click`.
